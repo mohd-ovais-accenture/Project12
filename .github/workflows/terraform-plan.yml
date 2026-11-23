@@ -1,0 +1,44 @@
+name: Terraform Plan CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Check no forbidden ports 22 or 3389 in Terraform files
+        run: |
+          if grep -rnE "\b(22|3389)\b" *.tf 2>/dev/null | grep -vq "blocked_ports"; then
+            echo "Error: Forbidden port 22 or 3389 detected!"
+            exit 1
+          fi
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Terraform Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-artifact
+          path: tfplan
+          if-no-files-found: error
