@@ -10,6 +10,6 @@ locals {
 resource "null_resource" "ci_plan_target" {
   triggers = {
     project = local.project_name
-    policy  = "no-port-22-or-3389"
+    policy  = "restricted-ports-disabled"
   }
 }
