@@ -3,10 +3,12 @@
 ## Overview
 This project runs Terraform format checks, initialization, validation, and plan generation automatically via GitHub Actions on pushes to main, uploading the generated plan file as a workflow artifact.
 
+
 ## Files in Repository
 - main.tf: Terraform configuration for the project.
 - .github/workflows/terraform-plan.yml: GitHub Actions CI workflow running terraform plan and uploading the plan artifact.
 - .gitignore: Ignores local Terraform state, cache, and temporary plan files.
+  
 
 ## Steps on Linux VM
 1. Go to ~/projects/project12.
